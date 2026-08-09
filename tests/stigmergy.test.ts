@@ -339,6 +339,59 @@ describe('position types and edge cases', () => {
 
     stigmergy.shutdown();
   });
+
+  test('handles contextHash-based positions', () => {
+    const stigmergy = new Stigmergy({ detectionRadius: 0.5, evaporationInterval: 100000 });
+
+    stigmergy.deposit('agent', PheromoneType.PATHWAY, { contextHash: 'abc123' });
+
+    const match = stigmergy.detect({ contextHash: 'abc123' });
+    expect(match.nearby.length).toBe(1);
+
+    const noMatch = stigmergy.detect({ contextHash: 'different' });
+    expect(noMatch.nearby.length).toBe(0);
+
+    stigmergy.shutdown();
+  });
+
+  test('grid is cleaned up after evaporation', () => {
+    const stigmergy = new Stigmergy({ evaporationInterval: 100000 });
+    const pheromone = stigmergy.deposit('agent', PheromoneType.PATHWAY, { topic: 'test' }, 0.001);
+
+    // Force the pheromone to be very old so it decays below threshold
+    pheromone.createdAt = Date.now() - 999999999;
+
+    stigmergy.evaporate();
+
+    // After evaporation, the pheromone should be gone
+    expect(stigmergy.activePheromones).toBe(0);
+
+    // Depositing a new pheromone at the same position should work correctly
+    const newPheromone = stigmergy.deposit('agent', PheromoneType.PATHWAY, { topic: 'test' }, 1.0);
+    expect(newPheromone).toBeDefined();
+
+    stigmergy.shutdown();
+  });
+
+  test('grid is cleaned up after maxPheromones eviction', () => {
+    const stigmergy = new Stigmergy({ maxPheromones: 1, evaporationInterval: 100000 });
+
+    const first = stigmergy.deposit('agent1', PheromoneType.PATHWAY, { topic: 'topic-a' }, 1.0);
+    // This should evict the first pheromone
+    stigmergy.deposit('agent2', PheromoneType.PATHWAY, { topic: 'topic-b' }, 1.0);
+
+    expect(stigmergy.activePheromones).toBe(1);
+
+    // The first pheromone should not be detectable
+    const detectA = stigmergy.detect({ topic: 'topic-a' });
+    expect(detectA.nearby.length).toBe(0);
+
+    // The second pheromone should be detectable
+    const detectB = stigmergy.detect({ topic: 'topic-b' });
+    expect(detectB.nearby.length).toBe(1);
+
+    stigmergy.shutdown();
+  });
 });
 
 // ============================================================================

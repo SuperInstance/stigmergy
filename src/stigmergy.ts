@@ -203,6 +203,7 @@ export class Stigmergy extends EventEmitter {
       const pheromone = this.pheromones.get(id);
       if (pheromone) {
         this.stats.byType[pheromone.type]--;
+        this.removeFromGrid(pheromone);
       }
       this.pheromones.delete(id);
       this.stats.totalEvaporated++;
@@ -281,6 +282,7 @@ export class Stigmergy extends EventEmitter {
       }
     }
     if (oldest) {
+      this.removeFromGrid(oldest);
       this.pheromones.delete(oldest.id);
       this.stats.totalEvaporated++;
     }
@@ -292,6 +294,20 @@ export class Stigmergy extends EventEmitter {
       this.grid.set(key, []);
     }
     this.grid.get(key)!.push(pheromone.id);
+  }
+
+  private removeFromGrid(pheromone: Pheromone): void {
+    const key = this.positionToKey(pheromone.position);
+    const ids = this.grid.get(key);
+    if (ids) {
+      const idx = ids.indexOf(pheromone.id);
+      if (idx !== -1) {
+        ids.splice(idx, 1);
+      }
+      if (ids.length === 0) {
+        this.grid.delete(key);
+      }
+    }
   }
 
   private positionToKey(position: Position): string {
@@ -311,6 +327,9 @@ export class Stigmergy extends EventEmitter {
       return 0;
     }
     if (a.taskType && b.taskType && a.taskType === b.taskType) {
+      return 0;
+    }
+    if (a.contextHash && b.contextHash && a.contextHash === b.contextHash) {
       return 0;
     }
     return 1;

@@ -93,6 +93,7 @@ describe('Stigmergy', () => {
 
     // Age the pheromone significantly so decay applies
     (pheromone as any).createdAt = Date.now() - 1000000;
+    (pheromone as any).lastDecayTime = Date.now() - 1000000;
 
     stigmergy.evaporate();
 
@@ -108,6 +109,7 @@ describe('Stigmergy', () => {
     const pheromone = stigmergy.deposit('agent', PheromoneType.PATHWAY, { coordinates: [0, 0] }, 0.001);
     // Make it very old so it decays below 0.01
     pheromone.createdAt = Date.now() - 999999999;
+    pheromone.lastDecayTime = Date.now() - 999999999;
 
     stigmergy.evaporate();
 
@@ -155,6 +157,60 @@ describe('Stigmergy', () => {
     expect(stats.totalDeposited).toBe(0);
     expect(stats.byType[PheromoneType.PATHWAY]).toBe(0);
   });
+  test('evaporation applies incremental decay correctly', () => {
+    const stigmergy = new Stigmergy({
+      defaultHalfLife: 1000, // 1 second half-life
+      evaporationInterval: 100000, // manual evaporation only
+    });
+
+    const pheromone = stigmergy.deposit('agent', PheromoneType.PATHWAY, { coordinates: [0, 0] }, 1.0);
+
+    // Simulate one half-life passing (1000ms)
+    pheromone.lastDecayTime = Date.now() - 1000;
+    stigmergy.evaporate();
+
+    // After one half-life, strength should be approximately halved
+    expect(pheromone.strength).toBeCloseTo(0.5, 1);
+
+    // Simulate another half-life passing from now
+    pheromone.lastDecayTime = Date.now() - 1000;
+    stigmergy.evaporate();
+
+    // After two half-lives total (but applied incrementally), should be ~0.25
+    expect(pheromone.strength).toBeCloseTo(0.25, 1);
+
+    stigmergy.shutdown();
+  });
+
+  test('multiple evaporation cycles match single equivalent decay', () => {
+    // Two rapid evaporation cycles should produce the same result as one
+    // cycle spanning the same total time (since decay is incremental)
+    const stigmergy1 = new Stigmergy({ defaultHalfLife: 10000, evaporationInterval: 100000 });
+    const stigmergy2 = new Stigmergy({ defaultHalfLife: 10000, evaporationInterval: 100000 });
+
+    const p1 = stigmergy1.deposit('a', PheromoneType.PATHWAY, { coordinates: [0, 0] }, 1.0);
+    const p2 = stigmergy2.deposit('a', PheromoneType.PATHWAY, { coordinates: [0, 0] }, 1.0);
+
+    // Wait a bit
+    const wait = 500;
+
+    // p1: two cycles of `wait` each
+    p1.lastDecayTime = Date.now() - wait;
+    stigmergy1.evaporate();
+    p1.lastDecayTime = Date.now() - wait;
+    stigmergy1.evaporate();
+
+    // p2: one cycle of 2*wait
+    p2.lastDecayTime = Date.now() - (2 * wait);
+    stigmergy2.evaporate();
+
+    // Both should be approximately the same
+    expect(p1.strength).toBeCloseTo(p2.strength, 3);
+
+    stigmergy1.shutdown();
+    stigmergy2.shutdown();
+  });
+
 });
 
 // ============================================================================
@@ -268,6 +324,7 @@ describe('events', () => {
     const pheromone = stigmergy.deposit('agent', PheromoneType.PATHWAY, { coordinates: [0, 0] }, 0.001);
     pheromone.strength = 0.009;
     pheromone.createdAt = Date.now() - 1000000;
+    pheromone.lastDecayTime = Date.now() - 1000000;
 
     stigmergy.on('evaporated', (data) => {
       expect(data.count).toBeGreaterThan(0);
@@ -360,6 +417,7 @@ describe('position types and edge cases', () => {
 
     // Force the pheromone to be very old so it decays below threshold
     pheromone.createdAt = Date.now() - 999999999;
+    pheromone.lastDecayTime = Date.now() - 999999999;
 
     stigmergy.evaporate();
 

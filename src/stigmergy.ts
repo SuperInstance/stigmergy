@@ -38,6 +38,7 @@ export interface Pheromone {
   position: Position;
   metadata: Map<string, unknown>;
   createdAt: number;
+  lastDecayTime: number;
   halfLife: number;
 }
 
@@ -108,6 +109,7 @@ export class Stigmergy extends EventEmitter {
     strength: number = 1.0,
     metadata: Map<string, unknown> = new Map()
   ): Pheromone {
+    const now = Date.now();
     const pheromone: Pheromone = {
       id: randomUUID(),
       type,
@@ -115,7 +117,8 @@ export class Stigmergy extends EventEmitter {
       strength: Math.min(1, Math.max(0, strength)),
       position,
       metadata,
-      createdAt: Date.now(),
+      createdAt: now,
+      lastDecayTime: now,
       halfLife: this.config.defaultHalfLife,
     };
 
@@ -190,9 +193,10 @@ export class Stigmergy extends EventEmitter {
     const toEvaporate: string[] = [];
 
     for (const [id, pheromone] of this.pheromones) {
-      const age = now - pheromone.createdAt;
-      const decayFactor = Math.pow(0.5, age / pheromone.halfLife);
+      const elapsed = now - pheromone.lastDecayTime;
+      const decayFactor = Math.pow(0.5, elapsed / pheromone.halfLife);
       pheromone.strength *= decayFactor;
+      pheromone.lastDecayTime = now;
 
       if (pheromone.strength < 0.01) {
         toEvaporate.push(id);

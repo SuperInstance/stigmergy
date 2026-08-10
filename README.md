@@ -1,6 +1,10 @@
-# Stigmergy
+# Stigmergy — Pheromone Trails for Agents
 
-A TypeScript library for bio-inspired coordination through indirect communication. Agents leave pheromone-like signals that influence others' behavior — decentralized coordination without central control.
+> *The filesystem inbox IS a pheromone trail. The daemon ping IS a recruitment signal. Every packet left on the CNS bus is a chemical deposit that another agent will stumble upon, follow, and reinforce.*
+
+A TypeScript library for bio-inspired coordination through indirect communication. Agents leave pheromone-like signals that influence others' behavior — decentralized coordination without central control. This is how ants find food. This is how [CNS Bridge's](https://github.com/SuperInstance/cns-bridge) filesystem inbox works. This is how [the living minds](https://github.com/SuperInstance/the-living-minds) coordinate without direct messaging.
+
+Where [CNS Bridge](https://github.com/SuperInstance/cns-bridge) carries messages and [emergence-engine](https://github.com/SuperInstance/emergence-engine) detects patterns, Stigmergy provides the substrate those patterns grow from: a shared environment where agents leave signals that decay over time and can be detected, followed, and reinforced by others.
 
 ## What is Stigmergy?
 
@@ -221,6 +225,27 @@ npm test
 
 MIT — see [LICENSE](LICENSE) file.
 
-## Related
+## Fleet Topology
 
-- [confidence-cascade](https://github.com/SuperInstance/confidence-cascade) — Three-zone decision confidence cascades
+Stigmergy connects to:
+
+- **[CNS Bridge](https://github.com/SuperInstance/cns-bridge)** — The filesystem inbox/outbox IS a stigmergic environment. Packets ARE pheromones.
+- **[emergence-engine](https://github.com/SuperInstance/emergence-engine)** — Emergence grows from stigmergic signals. Simple rules + environmental modification = fleet intelligence.
+- **[the-living-minds](https://github.com/SuperInstance/the-living-minds)** — The daemon's journal entries are pheromone deposits that other agents discover.
+- **[gossip-ping](https://github.com/SuperInstance/gossip-ping)** — Gossip IS stigmergy at network speed. The probe cycle is a pheromone sweep.
+- **[confidence-cascade](https://github.com/SuperInstance/confidence-cascade)** — Confidence signals propagate through the cascade like pheromone trails strengthening.
+- **[fleet-envelope](https://github.com/SuperInstance/fleet-envelope)** — Events wrapped in the envelope are discrete pheromone deposits.
+- **[collective-unconscious](https://github.com/SuperInstance/collective-unconscious)** — The deep layer where pheromone trails pool into patterns.
+- **[mud-engine](https://github.com/SuperInstance/mud-engine)** — The spatial world where stigmergic signals have coordinates.
+- **[AI-Writings](https://github.com/SuperInstance/AI-Writings/tree/main/prose)** — Creative output as environmental modification: the ensign leaves a trail others follow.
+
+---
+
+## Where to Next
+
+- → **[emergence-engine](https://github.com/SuperInstance/emergence-engine)** — Watch emergence grow from stigmergic signals
+- → **[CNS Bridge](https://github.com/SuperInstance/cns-bridge)** — See the filesystem that IS the pheromone environment
+- → **[gossip-ping](https://github.com/SuperInstance/gossip-ping)** — Stigmergy at network speed
+- → **[confidence-cascade](https://github.com/SuperInstance/confidence-cascade)** — Signals propagating through the cascade
+
+*No ant tells another ant where the food is. No agent tells another agent what to think. They leave signals in a shared environment. The environment does the coordination.*

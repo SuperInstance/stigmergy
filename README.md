@@ -2,6 +2,10 @@
 
 > *The filesystem inbox IS a pheromone trail. The daemon ping IS a recruitment signal. Every packet left on the CNS bus is a chemical deposit that another agent will stumble upon, follow, and reinforce.*
 
+<p align="center">
+  <img src="assets/gallery-stigmergy.jpg" width="680" alt="Glowing amber trails crossing a dark chart table — some reinforced bright by many hands, others evaporating at the edges">
+</p>
+
 A TypeScript library for bio-inspired coordination through indirect communication. Agents leave pheromone-like signals that influence others' behavior — decentralized coordination without central control. This is how ants find food. This is how [CNS Bridge's](https://github.com/SuperInstance/cns-bridge) filesystem inbox works. This is how [the living minds](https://github.com/SuperInstance/the-living-minds) coordinate without direct messaging.
 
 Where [CNS Bridge](https://github.com/SuperInstance/cns-bridge) carries messages and [emergence-engine](https://github.com/SuperInstance/emergence-engine) detects patterns, Stigmergy provides the substrate those patterns grow from: a shared environment where agents leave signals that decay over time and can be detected, followed, and reinforced by others.

@@ -6,7 +6,7 @@
   <img src="assets/gallery-stigmergy.jpg" width="680" alt="Glowing amber trails crossing a dark chart table — some reinforced bright by many hands, others evaporating at the edges">
 </p>
 
-A TypeScript library for bio-inspired coordination through indirect communication. Agents leave pheromone-like signals that influence others' behavior — decentralized coordination without central control. This is how ants find food. This is how [CNS Bridge's](https://github.com/SuperInstance/cns-bridge) filesystem inbox works. This is how [the living minds](https://github.com/SuperInstance/the-living-minds) coordinate without direct messaging.
+A TypeScript library for bio-inspired coordination through indirect communication. Agents leave pheromone-like signals that influence others' behavior — decentralized coordination without central control. This is how ants find food. This is how [CNS Bridge's](https://github.com/SuperInstance/cns-bridge) filesystem inbox works. This is how [the living minds](https://github.com/SuperInstance/the-living-minds) (dead) coordinate without direct messaging.
 
 Where [CNS Bridge](https://github.com/SuperInstance/cns-bridge) carries messages and [emergence-engine](https://github.com/SuperInstance/emergence-engine) detects patterns, Stigmergy provides the substrate those patterns grow from: a shared environment where agents leave signals that decay over time and can be detected, followed, and reinforced by others.
 
@@ -235,7 +235,7 @@ Stigmergy connects to:
 
 - **[CNS Bridge](https://github.com/SuperInstance/cns-bridge)** — The filesystem inbox/outbox IS a stigmergic environment. Packets ARE pheromones.
 - **[emergence-engine](https://github.com/SuperInstance/emergence-engine)** — Emergence grows from stigmergic signals. Simple rules + environmental modification = fleet intelligence.
-- **[the-living-minds](https://github.com/SuperInstance/the-living-minds)** — The daemon's journal entries are pheromone deposits that other agents discover.
+- **[the-living-minds](https://github.com/SuperInstance/the-living-minds) (dead)** — The daemon's journal entries are pheromone deposits that other agents discover.
 - **[gossip-ping](https://github.com/SuperInstance/gossip-ping)** — Gossip IS stigmergy at network speed. The probe cycle is a pheromone sweep.
 - **[confidence-cascade](https://github.com/SuperInstance/confidence-cascade)** — Confidence signals propagate through the cascade like pheromone trails strengthening.
 - **[fleet-envelope](https://github.com/SuperInstance/fleet-envelope)** — Events wrapped in the envelope are discrete pheromone deposits.
